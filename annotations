@@ -1,0 +1,4 @@
+npm install 'lib_name' -D  (instala como dependência de DEV apenas)
+
+npx knex migrate:make 'nome da migration'
+npx knex migrate:latest (roda a ultima migration)
