@@ -1,5 +1,6 @@
 const express = require('express');
 const routes = require('./routes')
+const ensinoRoutes = require('./ensinoRoutes')
 
 // app armazena a aplicação ( to instanciando a aplicação)
 const app = express();
@@ -7,6 +8,7 @@ const app = express();
 app.use(express.json()); //avisando a aplicação que o body request a ser recebido será em json
 
 app.use(routes);
+app.use(ensinoRoutes);
 
 
 //a aplicação vai ouvir a porta 3333. 
