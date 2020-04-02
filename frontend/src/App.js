@@ -1,10 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import './global.css';
+import Login from './pages/Login';
+
 
 function App() {
+  
   return (
-    <h1>Be a hero</h1>
+    <div>
+      <Login />
+    </div>
   );
 }
 
