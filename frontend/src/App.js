@@ -1,10 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import './global.css';
+
+import Routes from './routes';
 
 function App() {
+  
   return (
-    <h1>Be a hero</h1>
+    <Routes />
   );
 }
 
