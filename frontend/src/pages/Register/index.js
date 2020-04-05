@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
 // Services
@@ -16,7 +16,9 @@ export default function Register() {
   const [city, setCity] = useState('');
   const [uf, setUf] = useState('');
 
-  async function handleRegister(event) {
+  const history = useHistory();
+
+  async function handleRegister (event) {
     event.preventDefault(); //evita que a pagina recarregue appós submeter o form
 
     const data = {
@@ -30,7 +32,10 @@ export default function Register() {
     try {
       const response = await api.post('ongs', data)
       console.log('response', response)
+
       alert(`Seu ID de Acesso: ${response.data.id}`)
+
+      history.push('/')
     } catch (error) {
       console.log('error', error)
       alert(`Error: ${error.mensage}`)      
@@ -60,7 +65,8 @@ export default function Register() {
           />
           <input
             type="email"
-            placeholder="E-mail" value={email}
+            placeholder="E-mail"
+            value={email}
             onChange={event => setEmail(event.target.value)}
           />
           <input
