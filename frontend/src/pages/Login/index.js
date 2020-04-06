@@ -20,7 +20,7 @@ export default function Login(){
 
     try {
       const response = await api.post('session', { id })
-      console.log('repsonse', response)
+      console.log('repsonse login', response)
 
       localStorage.setItem('ongId', id);
       localStorage.setItem('ongName', response.data.name);

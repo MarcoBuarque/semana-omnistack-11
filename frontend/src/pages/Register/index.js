@@ -31,7 +31,7 @@ export default function Register() {
 
     try {
       const response = await api.post('ongs', data)
-      console.log('response', response)
+      console.log('response register', response)
 
       alert(`Seu ID de Acesso: ${response.data.id}`)
 
