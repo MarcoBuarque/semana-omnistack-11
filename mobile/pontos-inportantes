@@ -1,0 +1,17 @@
+
+- Principais tags View (div, footer, header...) e Text ( qualquer tipo de texto)
+
+- Componentes sem semantica significativa ex: h1 é o texto de título da pag, o mais relevante. h3 é a descrição, menos relevante... meio que uma herarquia. No React-Native 'Todo text é text' 
+
+- Não tem className, nem ID, se vc quiser passar um estilo para um componente, passa-o como prop do componente 
+ex: <View style={styles.container}> || <View style={{height: 80, width 100%....}>
+
+- Não existe herança de estilo no react-native, vc passa a estilização própria para o component
+ex em uma div eu colocar que a cor dos textos dentro dela será branca. Logo, um componente filho não herda a estilização do componente pai
+
+- As propriedades do css segues o padrão CamelCase, ao invés do hífen separando as palavrass
+
+- Ao passar as os valores das propriedades, se não forem números, têm que estar entre aspas
+
+- Todos os componente já possuem o 'display: flex' por padrão, não existe display: block || inline-block...
+
