@@ -10,16 +10,16 @@ import './style.css'
 import logoImg from './../../assets/logo.svg';
 
 export default function Profile() {
-  const [ongIncidents, setIncidents] = useState([])
+  const [ongIncidents, setOngIncidents] = useState([])
 
-  const ongID = localStorage.getItem('ongId')
+  const ongId = localStorage.getItem('ongId')
   const ongName = localStorage.getItem('ongName')
 
-  async function fetchData (name) {
+  async function fetchData (ongId) {
     try {
       const data = await api.get('profile', { 
         headers: {
-          Authorization: name
+          Authorization: ongId
         }
        })
        
@@ -29,14 +29,33 @@ export default function Profile() {
     }
   }
 
+  async function handleDeleteIncident(id) {
+    console.log('idddd ', id, ongId)
+    try {
+      const response = await api.delete(`incidents/${id}`, {
+        headers: {
+          Authorization: ongId
+        }
+      })
+
+      console.log('response delete incident', response)
+      setOngIncidents(ongIncidents.filter(incident => incident.id !== id))
+
+      //alert('Incidente deletado com sucesso!')
+      
+    } catch (error) {
+      alert('Erro ao deletar incidente, tente novamente', error)
+    }
+  }
+
   useEffect( async () => {
-    const response = await fetchData(ongID)
+    const response = await fetchData(ongId)
     console.log('fetch ong incidents', response.data)
 
 
-    setIncidents(response.data)
+    setOngIncidents(response.data)
 
-  }, []) 
+  }, [ongId]) 
 
   return (
     <div className="profile-content">
@@ -54,7 +73,7 @@ export default function Profile() {
       <ul>
         { ongIncidents.map(incident => {
             return (
-                <li>
+                <li key={incident.id}>
                   <strong>CASO:</strong>
                   <p>{`Caso teste: ${incident.title}`}</p>
 
@@ -62,9 +81,9 @@ export default function Profile() {
                   <p>{`Descrição teste: ${incident.description}`}</p>
 
                   <strong>VALOR:</strong>
-                  <p>{incident.value}</p>
+                  <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(incident.value)}</p>
 
-                  <button type="button" >
+                  <button type="button" onClick={() => handleDeleteIncident(incident.id)}>
                     <FiTrash2 size={20} color="#a8a83" />
                   </button>
                 </li>
