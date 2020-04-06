@@ -18,22 +18,22 @@ export default function Profile() {
   const ongId = localStorage.getItem('ongId');
   const ongName = localStorage.getItem('ongName');
 
-  async function fetchData(ongId) {
+  async function fetchData() {
     try {
-      const data = await api.get('profile', { 
+      const response = await api.get('profile', { 
         headers: {
           Authorization: ongId
         }
        })
        
-      return data
+      console.log('fetch ong incidents', response.data);
+      setOngIncidents(response.data);
     } catch (error) {
-      alert('algum erro aconteceu')
+      alert('Erro ao fazer o fetch dos dados, refaça seu login.')
     }
   }
 
   async function handleDeleteIncident(id) {
-    console.log('idddd ', id, ongId)
     try {
       const response = await api.delete(`incidents/${id}`, {
         headers: {
@@ -56,13 +56,10 @@ export default function Profile() {
     history.push('/');
   }
 
-  useEffect( async () => {
-    const response = await fetchData(ongId);
-    console.log('fetch ong incidents', response.data);
+  useEffect(() => {
 
-
-    setOngIncidents(response.data);
-
+    fetchData();
+    
   }, [ongId]) 
 
   return (

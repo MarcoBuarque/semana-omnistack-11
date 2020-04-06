@@ -20,9 +20,9 @@ export default function NewIncident() {
 
   const ongId = localStorage.getItem('ongId');
 
-  async function handleNewIncident (event) {
+  async function handleNewIncident(event) {
     event.preventDefault(); //evita que a pagina recarregue appós submeter o form
-
+    console.log('na função:::::')
     const data = {
       title,
       description,
@@ -36,7 +36,6 @@ export default function NewIncident() {
         }
       });
       console.log('response register', response);
-
 
       history.push('/profile');
     } catch (error) {

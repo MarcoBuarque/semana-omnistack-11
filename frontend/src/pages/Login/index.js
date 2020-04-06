@@ -16,7 +16,7 @@ export default function Login(){
 
   const history = useHistory();
 
-  async function validateLogin (event) {
+  async function validateLogin(event) {
     event.preventDefault(); //evita que a pagina recarregue appós submeter o form
 
     try {
