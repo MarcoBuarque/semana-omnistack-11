@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { FiPower, FiTrash2 } from 'react-icons/fi'
 
@@ -18,20 +18,20 @@ export default function Profile() {
   const ongId = localStorage.getItem('ongId');
   const ongName = localStorage.getItem('ongName');
 
-  async function fetchData() {
+  const fetchData  = useCallback(async () => {
     try {
       const response = await api.get('profile', { 
         headers: {
           Authorization: ongId
         }
-       })
-       
+        })
+        
       console.log('fetch ong incidents', response.data);
       setOngIncidents(response.data);
     } catch (error) {
       alert('Erro ao fazer o fetch dos dados, refaça seu login.')
     }
-  }
+  }, [ongId])
 
   async function handleDeleteIncident(id) {
     try {
@@ -60,7 +60,7 @@ export default function Profile() {
 
     fetchData();
     
-  }, [ongId]) 
+  }, [fetchData]) 
 
   return (
     <div className="profile-content">
