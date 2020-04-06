@@ -10,12 +10,15 @@ import './style.css'
 import logoImg from './../../assets/logo.svg';
 
 export default function Profile() {
-  const [ongIncidents, setOngIncidents] = useState([])
+  
+  const [ongIncidents, setOngIncidents] = useState([]);
 
-  const ongId = localStorage.getItem('ongId')
-  const ongName = localStorage.getItem('ongName')
+  const history = useHistory();
 
-  async function fetchData (ongId) {
+  const ongId = localStorage.getItem('ongId');
+  const ongName = localStorage.getItem('ongName');
+
+  async function fetchData(ongId) {
     try {
       const data = await api.get('profile', { 
         headers: {
@@ -36,24 +39,29 @@ export default function Profile() {
         headers: {
           Authorization: ongId
         }
-      })
+      });
 
-      console.log('response delete incident', response)
-      setOngIncidents(ongIncidents.filter(incident => incident.id !== id))
+      console.log('response delete incident', response);
+      setOngIncidents(ongIncidents.filter(incident => incident.id !== id));
 
-      //alert('Incidente deletado com sucesso!')
-      
+      //alert('Incidente deletado com sucesso!');
     } catch (error) {
-      alert('Erro ao deletar incidente, tente novamente', error)
+      alert('Erro ao deletar incidente, tente novamente', error);
     }
   }
 
+  function handleLogout() {
+    localStorage.clear();
+
+    history.push('/');
+  }
+
   useEffect( async () => {
-    const response = await fetchData(ongId)
-    console.log('fetch ong incidents', response.data)
+    const response = await fetchData(ongId);
+    console.log('fetch ong incidents', response.data);
 
 
-    setOngIncidents(response.data)
+    setOngIncidents(response.data);
 
   }, [ongId]) 
 
@@ -64,7 +72,7 @@ export default function Profile() {
         <span>{`Bem Vindo ${ongName}`}</span>
 
         <Link className="button" to="/incidents/new">Cadastrar novo caso</Link>
-        <button type="button">
+        <button type="button" onClick={handleLogout}>
           <FiPower color="#E02041" size={18} />
         </button>
       </header>
