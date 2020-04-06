@@ -19,7 +19,7 @@ export default function Register() {
 
   const history = useHistory();
 
-  async function handleRegister (event) {
+  async function handleRegister(event) {
     event.preventDefault(); //evita que a pagina recarregue appós submeter o form
 
     const data = {
