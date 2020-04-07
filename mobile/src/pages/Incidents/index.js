@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation, NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from './style';
 import logoImg from './../../assets/logo.png';
 
 export default function Incidents() {
-  
   const navigation = useNavigation();
   
   function navigateToDetail() {
