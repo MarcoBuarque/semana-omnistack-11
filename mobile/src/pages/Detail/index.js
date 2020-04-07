@@ -15,7 +15,7 @@ export default function Detail() {
     navigation.goBack(); // nome da rota  
   }
 
-  async function sendMail() {
+  function sendMail() {
     MailComposer.composeAsync({
       subject: 'Hérói do caso: Test11',
       recipients: ['gamessombra@gmail.com'],
