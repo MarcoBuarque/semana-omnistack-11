@@ -21,8 +21,8 @@ export default function Incidents() {
   const [loading, setLoading] = useState(false)
  
   async function loadIncidents() {
-    if (loading === true || (total > 0 && incidents.length === total )) {
-      return;
+    if (loading === true || (totalIncidents > 0 && incidents.length === Number(totalIncidents) )) {
+      return alert('Não foi possível fazer o fetch, por vafor saia e entre no app novamente')
     }
 
     setLoading(true)
