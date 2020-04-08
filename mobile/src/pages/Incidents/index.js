@@ -1,29 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+
+import api from './../../services/api'
 
 import styles from './style';
 import logoImg from './../../assets/logo.png';
 
 export default function Incidents() {
   const navigation = useNavigation();
-  
+  const [incidents, setIncidents] = useState([])
+ 
+  async function loadIncidents() {
+    try {
+      const response = await api.get('incidents')
+      
+      // console.log('response:::', response.data)
+      setIncidents(response.data)
+    } catch (error) {
+      alert('Erro ao fazer o fetch dos incidents.')
+    }
+  }
+  useLayoutEffect(() => {
+    loadIncidents();
+  }, [])
+
   function navigateToDetail() {
     navigation.navigate('Detail'); // nome da rota  
   }
 
-  function renderListItem() {
+  function renderListItem(incident) {
     return (
       <View style={styles.incident}>
-        <Text style={styles.incidentProperty}>ONG:</Text>
-        <Text style={styles.incidentValue}>APAD:</Text>
+         <Text style={styles.incidentProperty}>ONG:</Text>
+        <Text style={styles.incidentValue}>{incident.name}</Text>
 
         <Text style={styles.incidentProperty}>CASO:</Text>
-        <Text style={styles.incidentValue}>NAO SEI:</Text>
+        <Text style={styles.incidentValue}>{incident.title}</Text>
 
         <Text style={styles.incidentProperty}>VALOR:</Text>
-        <Text style={styles.incidentValue}>120,00:</Text>
+        <Text style={styles.incidentValue}>{incident.value}</Text>
 
         <TouchableOpacity
           style={styles.detailsButton}
@@ -36,6 +53,9 @@ export default function Incidents() {
     );
   }
 
+  // console.log('incidents::::', incidents)
+  // incidents.map( item => console.log('id', item.id, '\ntudp\n', item))
+  console.log('incident 0', incidents[0])
   return (
     <View style={styles.contaier}>
       <View style={styles.header}>
@@ -47,14 +67,18 @@ export default function Incidents() {
 
         <Text style={styles.title}>Bem-Vindo!</Text>
         <Text style={styles.description}>Escolha um dos casos abaixo e salve o dia</Text>
-
+        
         <FlatList 
-          data={[1, 2, 3, 4]}
+          data={incidents}
           style={styles.incidentList}
-          keyExtractor={incident => String(incident)} // keyExtractor retorna qual que é a informação única que existe em cada incidente, precisa estar em formato de string
+          keyExtractor={incident => String(incident.id)} // keyExtractor retorna qual que é a informação única que existe em cada incidente, precisa estar em formato de string
           showsVerticalScrollIndicator={false}
-          renderItem={() => renderListItem()}
-        />
+          renderItem={({ item: incident }) => renderListItem(incident)} 
+          // tem que passar como item, ou pegar o item e chamar de outra coisa
+          //para o renderItem vai um objeto com o item(incident) que tava no array de incidents 
+          // e o index do item da lista, ou seja, {index:incident.id, item:{incidentObjeto}}
+          // { item } faz o spread do item, então estou passando para a função apenas o item:{incidentObjeto}
+        /> 
     </View>
   );
 }
