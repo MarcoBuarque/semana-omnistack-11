@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,39 +18,60 @@ export default function Incidents() {
   const [partialIncidents, setpartialIncidents] = useState(0);
   
   const [page, setPage] = useState(1)
-  const [loading, setLoading] = useState(false)
+  const [loadMore, setLoadMore] = useState(false)
+  const [refresh, setRefresh] = useState(true)
  
-  async function loadIncidents() {
-    if (loading === true || (totalIncidents > 0 && incidents.length === Number(totalIncidents) )) {
-      return alert('Não foi possível fazer o fetch, por vafor saia e entre no app novamente')
-    }
-
-    setLoading(true)
-    
-    try {
-      // const response = await api.get(`incidents?page=${page}`) // modo feio
-      const response = await api.get('incidents', {
-        params: { page }
-      })
-      
-      // console.log('response:::', response.data)
-      setIncidents([...incidents, ...response.data])
-      setTotalIncidents(response.headers['x-total-count'])
-      setpartialIncidents(response.data.length)
-
-      setPage(page + 1)
-      setLoading(false)
-    } catch (error) {
-      alert('Erro ao fazer o fetch dos incidents.')
+  async function loadIncidents() { 
+    if(loadMore || refresh){
+      try {
+        const paramsPage = refresh ? 1 : page  // pq n consegui setar page 1 no useEffect do refresh
+        
+        // const response = await api.get(`incidents?page=${page}`) // modo feio
+        const response = await api.get('incidents', {
+          params: { page: paramsPage }
+        })
+        
+        const list = paramsPage === 1 ? response.data : [...incidents, ...response.data]
+        setpartialIncidents(list.length)
+        setIncidents(list)
+        setTotalIncidents(response.headers['x-total-count'])
+        setPage(paramsPage + 1)
+        
+        if(refresh) { 
+          setRefresh(false) 
+        }
+        if(loadMore) { 
+          setLoadMore(false) 
+        }
+      } catch (error) {
+        alert('Erro ao fazer o fetch dos incidents.')
+      }
     }
   }
 
   useEffect(() => {
     loadIncidents();
-  }, [])
+  }, [loadMore])
+
+  useEffect(() => {
+    loadIncidents();
+  }, [refresh])
 
   function navigateToDetail(incident) {
     navigation.navigate('Detail', { incident }); // nome da rota  e um objeto com os parametros/props q quero enviar
+  }
+
+  function HandleLoadMore() {
+    if (totalIncidents > 0 && incidents.length < Number(totalIncidents)) {
+      setLoadMore(true)
+    }
+  }
+
+  function onRefresh() {
+    if (refresh === false && page > 1) {
+      // setPage(1);
+      setRefresh(true)
+    }
   }
 
   function renderListItem(incident) {
@@ -76,8 +97,6 @@ export default function Incidents() {
     );
   }
 
-  // console.log('incidents::::', incidents)
-  // incidents.map( item => console.log('id', item.id, '\ntudp\n', item))
   return (
     <View style={styles.contaier}>
       <View style={styles.header}>
@@ -95,7 +114,7 @@ export default function Incidents() {
           style={styles.incidentList}
           keyExtractor={incident => String(incident.id)} // keyExtractor retorna qual que é a informação única que existe em cada incidente, precisa estar em formato de string
           showsVerticalScrollIndicator={false}
-          onEndReached={loadIncidents} // Ao chegar no final da lista, vai chamar a função
+          onEndReached={HandleLoadMore} // Ao chegar no final da lista, vai chamar a função
           onEndReachedThreshold={0.2} 
           // Quantos porcento ( de 0 a 1) do final da lista o 
           // usuário tem que estar para chamar o onEndReached
@@ -104,6 +123,13 @@ export default function Incidents() {
           //para o renderItem vai um objeto com o item(incident) que tava no array de incidents 
           // e o index do item da lista, ou seja, {index:incident.id, item:{incidentObjeto}}
           // { item } faz o spread do item, então estou passando para a função apenas o item:{incidentObjeto}
+          refreshing={refresh}
+          refreshControl= {
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={onRefresh}
+            />
+          }
         /> 
     </View>
   );
