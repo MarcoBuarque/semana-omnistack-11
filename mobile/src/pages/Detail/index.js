@@ -15,11 +15,9 @@ import logoImg from './../../assets/logo.png';
 export default function Detail() {
   const route = useRoute();
   const incident = route.params.incident
-  // const { route: { params: { incident } } } = props  // jeito dificil
+  const percentagePaid = route.params.percentagePaid
+  const [showProgress, setShowProgress] = useState(0)
 
-  const numPago = Math.random()*incident.value*100; //será fixo e a conta feita dentro do  animation e setINterval
-  // const percentagePaid = Math.round(numPago/incident.value);
-  const percentagePaid = 87;
 
   let animation = useRef(new Animated.Value(0));
   const [progress, setProgress] = useState(0);
@@ -31,8 +29,10 @@ export default function Detail() {
 
   useInterval(() => {
     if(progress < percentagePaid) {
-      setProgress(progress + 5);
-    }
+      const setNum = progress + 5 < percentagePaid ? progress + 5 : percentagePaid
+      setShowProgress(setNum);
+      setProgress(progress + 5); // ver uma progressão melhor q 5
+    } 
   }, 500);
 
   useEffect(() => {
@@ -63,7 +63,6 @@ export default function Detail() {
     Linking.openURL(`whatsapp://send?phone=+55${incident.whatsapp}&text=${message}`)
   }
 
-  console.log('results', percentagePaid, numPago/incident.value,progress, width)
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -107,7 +106,7 @@ export default function Detail() {
         <View style={styles.progressBar}>
         <Animated.View style={styles.absoluteFill, {backgroundColor: '#8BED4F', width }}/>
         </View>
-        <Text>{`${percentagePaid}%`}</Text>
+        <Text>{`${showProgress}%`}</Text>
       </View>
 
 

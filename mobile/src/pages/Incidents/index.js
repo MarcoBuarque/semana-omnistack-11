@@ -54,7 +54,9 @@ export default function Incidents() {
   }, [loadMore, refresh])
 
   function navigateToDetail(incident) {
-    navigation.navigate('Detail', { incident }); // nome da rota  e um objeto com os parametros/props q quero enviar
+    const numPago = Math.random()*incident.value*100;
+    const percentagePaid = Math.round(numPago/incident.value);
+    navigation.navigate('Detail', { incident, percentagePaid }); // nome da rota  e um objeto com os parametros/props q quero enviar
   }
 
   function HandleLoadMore() {
