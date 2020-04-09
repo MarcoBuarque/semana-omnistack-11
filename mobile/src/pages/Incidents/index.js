@@ -51,11 +51,7 @@ export default function Incidents() {
 
   useEffect(() => {
     loadIncidents();
-  }, [loadMore])
-
-  useEffect(() => {
-    loadIncidents();
-  }, [refresh])
+  }, [loadMore, refresh])
 
   function navigateToDetail(incident) {
     navigation.navigate('Detail', { incident }); // nome da rota  e um objeto com os parametros/props q quero enviar

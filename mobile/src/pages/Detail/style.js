@@ -74,8 +74,30 @@ export default StyleSheet.create({
     color: '#FFF',
     fontSize: 15,
     fontWeight: 'bold'
+  },
+
+  
+  ProgressBarContainer: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  
+  progressBar: {
+    height: 20,
+    width: '100%',
+    backgroundColor: 'white',
+    borderColor: '#000',
+    borderWidth: 2,
+    borderRadius: 5,
+    flexDirection: 'row'
+  },
+
+  absoluteFill: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0
   }
-
-
-
 })
